@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uygulama Girişi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Giriş Ekranı -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="app-logo">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                        <rect width="60" height="60" rx="12" fill="url(#gradient)"/>
+                        <path d="M30 15L45 25V40L30 50L15 40V25L30 15Z" fill="white" opacity="0.9"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="60" y2="60">
+                                <stop offset="0%" stop-color="#4F46E5"/>
+                                <stop offset="100%" stop-color="#7C3AED"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="tr">TR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+                
+                <h1 data-tr="Uygulamaya Hoşgeldiniz" data-en="Welcome to Application">Uygulamaya Hoşgeldiniz</h1>
+                <p class="subtitle" data-tr="Devam etmek için lisans anahtarı girin" data-en="Enter license key to continue">Devam etmek için lisans anahtarı girin</p>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="licenseKey" data-tr="Lisans Anahtarı" data-en="License Key">Lisans Anahtarı</label>
+                        <input type="text" id="licenseKey" data-placeholder-tr="Lisans anahtarınızı girin" data-placeholder-en="Enter your license key" placeholder="Lisans anahtarınızı girin" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-tr="Giriş Yap" data-en="Login">Giriş Yap</button>
+                    <p class="message" id="loginMessage"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Uygulama Ekranı -->
+    <div id="mainScreen" class="screen">
+        <div class="titlebar">
+            <div class="titlebar-drag">
+                <span class="app-title">Masaüstü Uygulaması</span>
+            </div>
+            <div class="titlebar-controls">
+                <button class="titlebar-btn" id="minimizeBtn">─</button>
+                <button class="titlebar-btn" id="maximizeBtn">□</button>
+                <button class="titlebar-btn close" id="closeBtn">✕</button>
+            </div>
+        </div>
+        
+        <div class="app-container">
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="user-info">
+                        <h3 id="displayName">Kullanıcı</h3>
+                        <p>Aktif</p>
+                    </div>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="#" class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="files">
+                        <span class="nav-icon">📁</span>
+                        <span data-tr="Dosyalar" data-en="Files">Dosyalar</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span data-tr="Ayarlar" data-en="Settings">Ayarlar</span>
+                    </a>
+                </nav>
+                
+                <button class="logout-btn" id="logoutBtn">
+                    <span>🚪</span> <span data-tr="Çıkış Yap" data-en="Logout">Çıkış Yap</span>
+                </button>
+            </aside>
+            
+            <main class="content">
+                <div class="content-page active" id="dashboard">
+                    <h2 data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <h3 data-tr="Hoşgeldiniz!" data-en="Welcome!">Hoşgeldiniz!</h3>
+                            <p data-tr="Bu basit bir masaüstü uygulaması şablonudur." data-en="This is a simple desktop application template.">Bu basit bir masaüstü uygulaması şablonudur.</p>
+                        </div>
+                        <div class="card">
+                            <h3 data-tr="İstatistikler" data-en="Statistics">İstatistikler</h3>
+                            <p><span data-tr="Toplam Kullanıcı:" data-en="Total Users:">Toplam Kullanıcı:</span> <strong id="userCount">0</strong></p>
+                        </div>
+                        <div class="card">
+                            <h3 data-tr="Bilgi" data-en="Info">Bilgi</h3>
+                            <p data-tr="Electron ile geliştirilmiştir." data-en="Developed with Electron.">Electron ile geliştirilmiştir.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="files">
+                    <h2 data-tr="Dosyalar" data-en="Files">Dosyalar</h2>
+                    <p data-tr="Dosya yönetimi buraya eklenebilir." data-en="File management can be added here.">Dosya yönetimi buraya eklenebilir.</p>
+                </div>
+                
+                <div class="content-page" id="settings">
+                    <h2 data-tr="Ayarlar" data-en="Settings">Ayarlar</h2>
+                    <div class="settings-group">
+                        <label>
+                            <input type="checkbox" id="darkMode">
+                            <span data-tr="Karanlık Mod" data-en="Dark Mode">Karanlık Mod</span>
+                        </label>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
