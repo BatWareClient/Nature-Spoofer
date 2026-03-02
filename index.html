@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Software</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Giriş Ekranı -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="tr">TR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+                
+                <div class="app-logo">
+                    <h1 data-tr="nature" data-en="nature">nature</h1>
+                </div>
+                
+                <p class="subtitle" data-tr="Bizi tercih ettiğiniz için teşekkürler" data-en="Thank you for choosing us">Bizi tercih ettiğiniz için teşekkürler</p>
+                <p class="subtitle" data-tr="Devam etmek için lisans anahtarınızı girin" data-en="Enter your license key to continue">Devam etmek için lisans anahtarınızı girin</p>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="licenseKey" data-tr="Lisans Anahtarı" data-en="License Key">Lisans Anahtarı</label>
+                        <input type="text" id="licenseKey" data-placeholder-tr="XXXX-XXXX-XXXX-XXXX" data-placeholder-en="XXXX-XXXX-XXXX-XXXX" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off">
+                    </div>
+                    
+                    <div class="license-help">
+                        <a href="https://discord.gg/CZ8chXQTVz" target="_blank" data-tr="Anahtarınız yok mu? Satın al" data-en="Don't have a key? Purchase">Anahtarınız yok mu? Satın al</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" data-tr="Devam Et" data-en="Continue">Devam Et</button>
+                    <p class="message" id="loginMessage"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Uygulama Ekranı -->
+    <div id="mainScreen" class="screen">
+        <div class="app-container">
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="user-info">
+                        <h3 id="displayName" data-tr="Kullanıcı" data-en="User">Kullanıcı</h3>
+                        <p data-tr="Aktif" data-en="Active">Aktif</p>
+                    </div>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="#" class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="downloads">
+                        <span class="nav-icon">⬇️</span>
+                        <span data-tr="İndirmeler" data-en="Downloads">İndirmeler</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span data-tr="Ayarlar" data-en="Settings">Ayarlar</span>
+                    </a>
+                    <a href="#" class="nav-item admin-only" data-page="admin" style="display: none;">
+                        <span class="nav-icon">👑</span>
+                        <span data-tr="Admin Panel" data-en="Admin Panel">Admin Panel</span>
+                    </a>
+                </nav>
+                
+                <button class="logout-btn" id="logoutBtn">
+                    <span>🚪</span> <span data-tr="Çıkış Yap" data-en="Logout">Çıkış Yap</span>
+                </button>
+            </aside>
+            
+            <main class="content">
+                <div class="content-page active" id="dashboard">
+                    <h2 data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <h3 data-tr="Hoşgeldiniz!" data-en="Welcome!">Hoşgeldiniz!</h3>
+                            <p data-tr="Nature Software'a hoş geldiniz. İndirmeler sekmesinden uygulamalarımızı indirebilirsiniz." data-en="Welcome to Nature Software. You can download our applications from the Downloads tab.">Nature Software'a hoş geldiniz. İndirmeler sekmesinden uygulamalarımızı indirebilirsiniz.</p>
+                        </div>
+                        <div class="card license-card">
+                            <h3 data-tr="Lisans Bilgileri" data-en="License Information">Lisans Bilgileri</h3>
+                            <div class="license-info">
+                                <p><strong data-tr="Kalan Süre:" data-en="Time Remaining:">Kalan Süre:</strong></p>
+                                <p class="time-display" id="timeRemaining">--</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3 data-tr="İstatistikler" data-en="Statistics">İstatistikler</h3>
+                            <p><span data-tr="Toplam Kullanıcı:" data-en="Total Users:">Toplam Kullanıcı:</span> <strong id="userCount">20</strong></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="downloads">
+                    <h2 data-tr="İndirmeler" data-en="Downloads">İndirmeler</h2>
+                    <div class="download-section">
+                        <div class="download-card">
+                            <div class="download-icon">💻</div>
+                            <h3 data-tr="Nature Software - Windows 10" data-en="Nature Software - Windows 10">Nature Software - Windows 10</h3>
+                            <p data-tr="Windows 10 için masaüstü uygulaması" data-en="Desktop application for Windows 10">Windows 10 için masaüstü uygulaması</p>
+                            <div class="download-info">
+                                <span data-tr="Versiyon: 1.0.0" data-en="Version: 1.0.0">Versiyon: 1.0.0</span>
+                                <span data-tr="Boyut: 85 MB" data-en="Size: 85 MB">Boyut: 85 MB</span>
+                            </div>
+                            <button class="download-btn" id="downloadWindows">
+                                <span>⬇️</span>
+                                <span data-tr="Windows 10 İndir" data-en="Download Windows 10">Windows 10 İndir</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="settings">
+                    <h2 data-tr="Ayarlar" data-en="Settings">Ayarlar</h2>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Dil Ayarları" data-en="Language Settings">Dil Ayarları</h3>
+                        <div class="settings-group">
+                            <label>
+                                <input type="radio" name="language" value="tr" id="langTR" checked>
+                                <span data-tr="Türkçe" data-en="Turkish">Türkçe</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="language" value="en" id="langEN">
+                                <span data-tr="İngilizce" data-en="English">İngilizce</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="admin">
+                    <h2 data-tr="Admin Panel" data-en="Admin Panel">Admin Panel</h2>
+                    
+                    <div class="admin-warning">
+                        <span>👑</span>
+                        <p data-tr="Yönetici paneline hoş geldiniz. Bu alan sadece yöneticiler içindir." data-en="Welcome to the admin panel. This area is for administrators only.">Yönetici paneline hoş geldiniz. Bu alan sadece yöneticiler içindir.</p>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Aktif Kullanıcılar" data-en="Active Users">Aktif Kullanıcılar</h3>
+                        <div class="users-table">
+                            <table id="activeUsersTable">
+                                <thead>
+                                    <tr>
+                                        <th data-tr="Lisans Anahtarı" data-en="License Key">Lisans Anahtarı</th>
+                                        <th data-tr="Aktivasyon Zamanı" data-en="Activation Time">Aktivasyon Zamanı</th>
+                                        <th data-tr="Kalan Süre" data-en="Time Remaining">Kalan Süre</th>
+                                        <th data-tr="İşlem" data-en="Action">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; color: #9ca3af;">
+                                            <span data-tr="Aktif kullanıcı yok" data-en="No active users">Aktif kullanıcı yok</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Lisans Yönetimi" data-en="License Management">Lisans Yönetimi</h3>
+                        <div class="settings-group">
+                            <button class="reset-btn" id="resetLicenses">
+                                <span data-tr="Tüm Lisans Sürelerini Sıfırla" data-en="Reset All License Times">Tüm Lisans Sürelerini Sıfırla</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
