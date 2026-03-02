@@ -125,7 +125,12 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log('Validating license:', licenseKey);
         
         try {
-            const response = await API.validateLicense(licenseKey);
+            // Get browser fingerprint (HWID)
+            const hwid = await CGAuth.getHWID();
+            console.log('HWID:', hwid);
+            
+            // Authenticate with cgauth
+            const response = await CGAuth.authLicense(licenseKey, hwid);
             
             console.log('Validation response:', response);
             
