@@ -129,13 +129,19 @@ window.addEventListener('DOMContentLoaded', () => {
             const hwid = await CGAuth.getHWID();
             console.log('HWID:', hwid);
             
-            // Authenticate with cgauth
-            const response = await CGAuth.authLicense(licenseKey, hwid);
+            // Authenticate via Vercel serverless function
+            const response = await fetch('/api/auth-license', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ licenseKey, hwid })
+            });
             
-            console.log('Validation response:', response);
+            const result = await response.json();
             
-            if (response.success) {
-                const data = response.data;
+            console.log('Validation response:', result);
+            
+            if (result.success) {
+                const data = result.data;
                 
                 // Uygulama adı kontrolü
                 if (data.app_name !== CGAuth.YOUR_APP_NAME) {
@@ -175,7 +181,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     }
                 }, 800);
             } else {
-                message.textContent = response.error || window.messages.invalidKey;
+                message.textContent = result.error || window.messages.invalidKey;
                 message.className = 'message error';
             }
         } catch (error) {
