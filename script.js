@@ -333,6 +333,19 @@ function startTimeUpdate() {
     updateTimeRemaining();
     if (!isAdmin) {
         timeUpdateInterval = setInterval(updateTimeRemaining, 1000);
+        
+        // Her 10 saniyede bir lisans geçerliliğini kontrol et
+        setInterval(() => {
+            if (currentLicenseInfo && !currentLicenseInfo.isAdmin) {
+                const activationTime = localStorage.getItem(`license_${currentLicenseInfo.key}`);
+                
+                // Lisans iptal edilmiş mi kontrol et
+                if (!activationTime) {
+                    alert(currentLang === 'tr' ? 'Lisansınız iptal edildi!' : 'Your license has been revoked!');
+                    document.getElementById('logoutBtn').click();
+                }
+            }
+        }, 10000);
     }
 }
 
