@@ -143,32 +143,25 @@ window.addEventListener('DOMContentLoaded', () => {
             if (result.success) {
                 const data = result.data;
                 
-                // Debug: Tüm data'yı göster
-                console.log('Full cgauth data:', data);
+                // Debug: Uygulama adını göster
+                console.log('App name from cgauth:', data.app_name);
+                console.log('Expected app name:', CGAuth.YOUR_APP_NAME);
                 
-                // Kalan gün hesaplama
-                let daysRemaining = 365; // Default
-                
-                if (data.expiry_date) {
-                    const expiryDate = new Date(data.expiry_date * 1000); // Unix timestamp to Date
-                    const now = new Date();
-                    const diffMs = expiryDate - now;
-                    daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-                } else if (data.days_remaining) {
-                    daysRemaining = data.days_remaining;
-                }
-                
-                console.log('Calculated days remaining:', daysRemaining);
+                // Uygulama adı kontrolü (şimdilik devre dışı - cgauth'da ayarla)
+                // if (data.app_name !== CGAuth.YOUR_APP_NAME) {
+                //     message.textContent = currentLang === 'tr' ? 'Bu lisans bu uygulama için geçerli değil!' : 'This license is not valid for this application!';
+                //     message.className = 'message error';
+                //     return;
+                // }
                 
                 // Lisans geçerli
                 currentLicenseInfo = {
                     key: licenseKey,
                     activationTime: new Date(),
-                    daysRemaining: daysRemaining,
-                    expirationTime: new Date(Date.now() + daysRemaining * 24 * 60 * 60 * 1000),
+                    daysRemaining: data.days_remaining || 30,
+                    expirationTime: new Date(Date.now() + (data.days_remaining || 30) * 24 * 60 * 60 * 1000),
                     isAdmin: data.is_admin || false,
-                    appName: data.app_name,
-                    status: data.status
+                    appName: data.app_name
                 };
                 
                 if (currentLicenseInfo.isAdmin) {
@@ -475,12 +468,10 @@ function revokeLicense(licenseKey) {
         localStorage.removeItem(`license_${licenseKey}`);
         
         const successText = currentLang === 'tr' 
-            ? 'Lisansınız iptal edildi!'
+            ? 'Lisans iptal edildi!'
             : 'License revoked!';
         
         alert(successText);
         loadActiveUsers();
     }
 }
-
-
