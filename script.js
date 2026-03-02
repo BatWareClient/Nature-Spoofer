@@ -143,6 +143,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('mainScreen').classList.add('active');
                 updateTimeRemaining();
                 showAdminPanel();
+                
+                // Admin ismini güncelle
+                document.getElementById('displayName').textContent = 'Admin';
+                document.getElementById('userInitial').textContent = 'A';
             }, 800);
             return;
         }
@@ -229,18 +233,8 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // İndirme butonları
     document.getElementById('downloadWindows').addEventListener('click', function() {
-        alert('Windows sürümü indirilecek! (Dosya yolu eklenecek)');
-        // window.location.href = 'downloads/NatureSoftware-Windows.exe';
-    });
-    
-    document.getElementById('downloadMac').addEventListener('click', function() {
-        alert('macOS sürümü indirilecek! (Dosya yolu eklenecek)');
-        // window.location.href = 'downloads/NatureSoftware-macOS.dmg';
-    });
-    
-    document.getElementById('downloadLinux').addEventListener('click', function() {
-        alert('Linux sürümü indirilecek! (Dosya yolu eklenecek)');
-        // window.location.href = 'downloads/NatureSoftware-Linux.AppImage';
+        alert('Windows 10 sürümü indirilecek! (Dosya yolu eklenecek)');
+        // window.location.href = 'downloads/NatureSoftware-Windows10.exe';
     });
     
     // Karanlık mod
@@ -346,4 +340,117 @@ function startTimeUpdate() {
 // Admin panelini göster
 function showAdminPanel() {
     document.querySelector('.admin-only').style.display = 'flex';
+    loadActiveUsers();
+}
+
+// Aktif kullanıcıları yükle
+function loadActiveUsers() {
+    const tbody = document.getElementById('usersTableBody');
+    tbody.innerHTML = '';
+    
+    let hasUsers = false;
+    
+    // LocalStorage'daki tüm lisans kayıtlarını kontrol et
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        
+        if (key.startsWith('license_')) {
+            const licenseKey = key.replace('license_', '');
+            const activationTime = localStorage.getItem(key);
+            
+            // Lisans bilgilerini bul
+            const licenseData = validLicenseKeys.find(l => l.key === licenseKey);
+            
+            if (licenseData && licenseData.unit !== 'unlimited') {
+                hasUsers = true;
+                
+                const activationDate = new Date(activationTime);
+                const now = new Date();
+                
+                let expirationMs;
+                if (licenseData.unit === 'minutes') {
+                    expirationMs = licenseData.duration * 60 * 1000;
+                } else if (licenseData.unit === 'hours') {
+                    expirationMs = licenseData.duration * 60 * 60 * 1000;
+                } else {
+                    expirationMs = licenseData.duration * 24 * 60 * 60 * 1000;
+                }
+                
+                const expirationDate = new Date(activationDate.getTime() + expirationMs);
+                const remaining = expirationDate - now;
+                
+                let timeText = '';
+                let statusClass = '';
+                
+                if (remaining <= 0) {
+                    timeText = currentLang === 'tr' ? 'Süresi dolmuş' : 'Expired';
+                    statusClass = 'expired';
+                } else {
+                    const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    if (currentLang === 'tr') {
+                        if (days > 0) {
+                            timeText = `${days} gün ${hours} saat`;
+                        } else if (hours > 0) {
+                            timeText = `${hours} saat ${minutes} dakika`;
+                        } else {
+                            timeText = `${minutes} dakika`;
+                        }
+                    } else {
+                        if (days > 0) {
+                            timeText = `${days} days ${hours} hours`;
+                        } else if (hours > 0) {
+                            timeText = `${hours} hours ${minutes} minutes`;
+                        } else {
+                            timeText = `${minutes} minutes`;
+                        }
+                    }
+                    statusClass = 'active';
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><code>${licenseKey}</code></td>
+                    <td>${activationDate.toLocaleString()}</td>
+                    <td class="${statusClass}">${timeText}</td>
+                    <td>
+                        <button class="revoke-btn" onclick="revokeLicense('${licenseKey}')">
+                            <span data-tr="İptal Et" data-en="Revoke">${currentLang === 'tr' ? 'İptal Et' : 'Revoke'}</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+    }
+    
+    if (!hasUsers) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align: center; color: #9ca3af;">
+                    <span data-tr="Aktif kullanıcı yok" data-en="No active users">${currentLang === 'tr' ? 'Aktif kullanıcı yok' : 'No active users'}</span>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Lisansı iptal et
+function revokeLicense(licenseKey) {
+    const confirmText = currentLang === 'tr' 
+        ? `${licenseKey} lisansını iptal etmek istediğinize emin misiniz?`
+        : `Are you sure you want to revoke license ${licenseKey}?`;
+    
+    if (confirm(confirmText)) {
+        localStorage.removeItem(`license_${licenseKey}`);
+        
+        const successText = currentLang === 'tr' 
+            ? 'Lisans iptal edildi!'
+            : 'License revoked!';
+        
+        alert(successText);
+        loadActiveUsers();
+    }
 }
