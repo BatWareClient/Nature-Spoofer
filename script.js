@@ -192,6 +192,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     isAdmin = true;
                 }
                 
+                // cgauth lisansını localStorage'a kaydet (hem admin hem user için - tracking için gerekli)
+                localStorage.setItem(`license_${licenseKey}`, new Date().toISOString());
+                
                 message.textContent = window.messages.loginSuccess;
                 message.className = 'message success';
                 
@@ -203,9 +206,9 @@ window.addEventListener('DOMContentLoaded', () => {
                         showAdminPanel();
                         document.getElementById('displayName').textContent = 'Admin';
                         document.getElementById('userInitial').textContent = 'A';
-                    } else {
-                        startTimeUpdate();
                     }
+                    // Her durumda time update başlat (admin için sadece display, user için countdown)
+                    startTimeUpdate();
                 }, 800);
             } else {
                 message.textContent = result.error || window.messages.invalidKey;
@@ -220,10 +223,13 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Çıkış yap
     document.getElementById('logoutBtn').addEventListener('click', function() {
-        // Lisans kullanımını serbest bırak
+        // Lisans kullanımını serbest bırak (sessionStorage temizliği - eski sistem için)
         if (currentLicenseInfo && !currentLicenseInfo.isAdmin) {
             sessionStorage.removeItem(`license_inuse_${currentLicenseInfo.key}`);
         }
+        
+        // NOT: localStorage'dan SİLMİYORUZ - sadece admin "İptal Et" butonu ile silinmeli
+        // Aksi halde her çıkışta lisans iptal edilmiş gibi görünür
         
         document.getElementById('mainScreen').classList.remove('active');
         document.getElementById('loginScreen').classList.add('active');
@@ -352,21 +358,21 @@ function updateTimeRemaining() {
 // Zaman güncellemesini başlat
 function startTimeUpdate() {
     updateTimeRemaining();
-    if (!isAdmin) {
-        timeUpdateInterval = setInterval(updateTimeRemaining, 1000);
-        
-        // Her 10 saniyede bir lisans geçerliliğini kontrol et
+    
+    // Her 1 saniyede kalan süreyi güncelle (admin için "∞ Sınırsız", user için countdown)
+    timeUpdateInterval = setInterval(updateTimeRemaining, 1000);
+    
+    // Sadece normal kullanıcılar için lisans iptal kontrolü yap
+    if (!isAdmin && currentLicenseInfo && !currentLicenseInfo.isAdmin) {
         setInterval(() => {
-            if (currentLicenseInfo && !currentLicenseInfo.isAdmin) {
-                const activationTime = localStorage.getItem(`license_${currentLicenseInfo.key}`);
-                
-                // Lisans iptal edilmiş mi kontrol et
-                if (!activationTime) {
-                    alert(currentLang === 'tr' ? 'Lisansınız iptal edildi!' : 'Your license has been revoked!');
-                    document.getElementById('logoutBtn').click();
-                }
+            const activationTime = localStorage.getItem(`license_${currentLicenseInfo.key}`);
+            
+            // Lisans iptal edilmiş mi kontrol et (sadece admin tarafından manuel iptal için)
+            if (!activationTime) {
+                alert(currentLang === 'tr' ? 'Lisansınız iptal edildi!' : 'Your license has been revoked!');
+                document.getElementById('logoutBtn').click();
             }
-        }, 10000);
+        }, 30000); // 30 saniye
     }
 }
 
@@ -398,7 +404,67 @@ function loadActiveUsers() {
             const licenseKey = key.replace('license_', '');
             const activationTime = localStorage.getItem(key);
             
-            // Lisans bilgilerini bul
+            // cgauth lisansları için - süre bilgisi currentLicenseInfo'dan gelir
+            if (currentLicenseInfo && currentLicenseInfo.key === licenseKey) {
+                hasUsers = true;
+                
+                const activationDate = new Date(activationTime);
+                const now = new Date();
+                const expirationDate = currentLicenseInfo.expirationTime;
+                const remaining = expirationDate - now;
+                
+                let timeText = '';
+                let statusClass = '';
+                
+                if (remaining <= 0) {
+                    timeText = currentLang === 'tr' ? 'Süresi dolmuş' : 'Expired';
+                    statusClass = 'expired';
+                } else {
+                    const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                    
+                    if (currentLang === 'tr') {
+                        if (days > 0) {
+                            timeText = `${days} gün ${hours} saat ${minutes} dakika ${seconds} saniye`;
+                        } else if (hours > 0) {
+                            timeText = `${hours} saat ${minutes} dakika ${seconds} saniye`;
+                        } else if (minutes > 0) {
+                            timeText = `${minutes} dakika ${seconds} saniye`;
+                        } else {
+                            timeText = `${seconds} saniye`;
+                        }
+                    } else {
+                        if (days > 0) {
+                            timeText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                        } else if (hours > 0) {
+                            timeText = `${hours}h ${minutes}m ${seconds}s`;
+                        } else if (minutes > 0) {
+                            timeText = `${minutes}m ${seconds}s`;
+                        } else {
+                            timeText = `${seconds}s`;
+                        }
+                    }
+                    statusClass = 'active';
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><code>${licenseKey}</code></td>
+                    <td>${activationDate.toLocaleString()}</td>
+                    <td class="${statusClass}">${timeText}</td>
+                    <td>
+                        <button class="revoke-btn" onclick="revokeLicense('${licenseKey}')">
+                            <span data-tr="İptal Et" data-en="Revoke">${currentLang === 'tr' ? 'İptal Et' : 'Revoke'}</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+                continue;
+            }
+            
+            // Eski sistem lisansları için (validLicenseKeys array)
             const licenseData = validLicenseKeys.find(l => l.key === licenseKey);
             
             if (licenseData && licenseData.unit !== 'unlimited') {
