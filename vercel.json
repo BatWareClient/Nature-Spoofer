@@ -1,8 +1,5 @@
 {
-  "functions": {
-    "api/validate.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ]
 }
