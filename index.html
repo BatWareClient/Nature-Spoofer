@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Software</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Giriş Ekranı -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="app-logo">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                        <rect width="60" height="60" rx="12" fill="url(#gradient)"/>
+                        <path d="M30 15L45 25V40L30 50L15 40V25L30 15Z" fill="white" opacity="0.9"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="60" y2="60">
+                                <stop offset="0%" stop-color="#4F46E5"/>
+                                <stop offset="100%" stop-color="#7C3AED"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="tr">TR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                </div>
+                
+                <h1 data-tr="Nature Software'a Hoşgeldiniz" data-en="Welcome to Nature Software">Nature Software'a Hoşgeldiniz</h1>
+                <p class="subtitle" data-tr="Devam etmek için lisans anahtarı girin" data-en="Enter license key to continue">Devam etmek için lisans anahtarı girin</p>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="licenseKey" data-tr="Lisans Anahtarı" data-en="License Key">Lisans Anahtarı</label>
+                        <input type="text" id="licenseKey" data-placeholder-tr="Lisans anahtarınızı girin" data-placeholder-en="Enter your license key" placeholder="Lisans anahtarınızı girin" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-tr="Giriş Yap" data-en="Login">Giriş Yap</button>
+                    <p class="message" id="loginMessage"></p>
+                </form>
+                
+                <div class="discord-link">
+                    <a href="https://discord.gg/FpryS4Ah" target="_blank" id="discordLink">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        <span data-tr="Discord Sunucumuza Katıl" data-en="Join Our Discord Server">Discord Sunucumuza Katıl</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Uygulama Ekranı -->
+    <div id="mainScreen" class="screen">
+        <div class="app-container">
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="user-info">
+                        <h3 id="displayName" data-tr="Kullanıcı" data-en="User">Kullanıcı</h3>
+                        <p data-tr="Aktif" data-en="Active">Aktif</p>
+                    </div>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="#" class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="downloads">
+                        <span class="nav-icon">⬇️</span>
+                        <span data-tr="İndirmeler" data-en="Downloads">İndirmeler</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span data-tr="Ayarlar" data-en="Settings">Ayarlar</span>
+                    </a>
+                    <a href="#" class="nav-item admin-only" data-page="admin" style="display: none;">
+                        <span class="nav-icon">👑</span>
+                        <span data-tr="Admin Panel" data-en="Admin Panel">Admin Panel</span>
+                    </a>
+                </nav>
+                
+                <button class="logout-btn" id="logoutBtn">
+                    <span>🚪</span> <span data-tr="Çıkış Yap" data-en="Logout">Çıkış Yap</span>
+                </button>
+            </aside>
+            
+            <main class="content">
+                <div class="content-page active" id="dashboard">
+                    <h2 data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <h3 data-tr="Hoşgeldiniz!" data-en="Welcome!">Hoşgeldiniz!</h3>
+                            <p data-tr="Nature Software'a hoş geldiniz. İndirmeler sekmesinden uygulamalarımızı indirebilirsiniz." data-en="Welcome to Nature Software. You can download our applications from the Downloads tab.">Nature Software'a hoş geldiniz. İndirmeler sekmesinden uygulamalarımızı indirebilirsiniz.</p>
+                        </div>
+                        <div class="card license-card">
+                            <h3 data-tr="Lisans Bilgileri" data-en="License Information">Lisans Bilgileri</h3>
+                            <div class="license-info">
+                                <p><strong data-tr="Kalan Süre:" data-en="Time Remaining:">Kalan Süre:</strong></p>
+                                <p class="time-display" id="timeRemaining">--</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3 data-tr="İstatistikler" data-en="Statistics">İstatistikler</h3>
+                            <p><span data-tr="Toplam Kullanıcı:" data-en="Total Users:">Toplam Kullanıcı:</span> <strong id="userCount">20</strong></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="downloads">
+                    <h2 data-tr="İndirmeler" data-en="Downloads">İndirmeler</h2>
+                    <div class="download-section">
+                        <div class="download-card">
+                            <div class="download-icon">💻</div>
+                            <h3 data-tr="Nature Software - Windows 10" data-en="Nature Software - Windows 10">Nature Software - Windows 10</h3>
+                            <p data-tr="Windows 10 için masaüstü uygulaması" data-en="Desktop application for Windows 10">Windows 10 için masaüstü uygulaması</p>
+                            <div class="download-info">
+                                <span data-tr="Versiyon: 1.0.0" data-en="Version: 1.0.0">Versiyon: 1.0.0</span>
+                                <span data-tr="Boyut: 85 MB" data-en="Size: 85 MB">Boyut: 85 MB</span>
+                            </div>
+                            <button class="download-btn" id="downloadWindows">
+                                <span>⬇️</span>
+                                <span data-tr="Windows 10 İndir" data-en="Download Windows 10">Windows 10 İndir</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="settings">
+                    <h2 data-tr="Ayarlar" data-en="Settings">Ayarlar</h2>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Dil Ayarları" data-en="Language Settings">Dil Ayarları</h3>
+                        <div class="settings-group">
+                            <label>
+                                <input type="radio" name="language" value="tr" id="langTR" checked>
+                                <span data-tr="Türkçe" data-en="Turkish">Türkçe</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="language" value="en" id="langEN">
+                                <span data-tr="İngilizce" data-en="English">İngilizce</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Görünüm" data-en="Appearance">Görünüm</h3>
+                        <div class="settings-group">
+                            <label>
+                                <input type="checkbox" id="darkMode">
+                                <span data-tr="Karanlık Mod" data-en="Dark Mode">Karanlık Mod</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-page" id="admin">
+                    <h2 data-tr="Admin Panel" data-en="Admin Panel">Admin Panel</h2>
+                    
+                    <div class="admin-warning">
+                        <span>👑</span>
+                        <p data-tr="Yönetici paneline hoş geldiniz. Bu alan sadece yöneticiler içindir." data-en="Welcome to the admin panel. This area is for administrators only.">Yönetici paneline hoş geldiniz. Bu alan sadece yöneticiler içindir.</p>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Aktif Kullanıcılar" data-en="Active Users">Aktif Kullanıcılar</h3>
+                        <div class="users-table">
+                            <table id="activeUsersTable">
+                                <thead>
+                                    <tr>
+                                        <th data-tr="Lisans Anahtarı" data-en="License Key">Lisans Anahtarı</th>
+                                        <th data-tr="Aktivasyon Zamanı" data-en="Activation Time">Aktivasyon Zamanı</th>
+                                        <th data-tr="Kalan Süre" data-en="Time Remaining">Kalan Süre</th>
+                                        <th data-tr="İşlem" data-en="Action">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; color: #9ca3af;">
+                                            <span data-tr="Aktif kullanıcı yok" data-en="No active users">Aktif kullanıcı yok</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 data-tr="Lisans Yönetimi" data-en="License Management">Lisans Yönetimi</h3>
+                        <div class="settings-group">
+                            <button class="reset-btn" id="resetLicenses">
+                                <span data-tr="Tüm Lisans Sürelerini Sıfırla" data-en="Reset All License Times">Tüm Lisans Sürelerini Sıfırla</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
