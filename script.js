@@ -202,7 +202,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     activationTime: new Date(),
                     daysRemaining: daysRemaining,
                     expirationTime: expirationTime,
-                    isAdmin: data.is_admin || licenseKey === 'ADMIN-17D287-1BBD7B-51EA15',
+                    isAdmin: data.is_admin || licenseKey === 'ADMIN-17D287-1BBD7B-51EA15' || licenseKey === 'ADMIN-594E38-626B67-58C944',
                     appName: data.app_name,
                     status: data.status
                 };
