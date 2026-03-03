@@ -120,7 +120,7 @@ h1 {
     text-align: center;
     color: rgba(255, 255, 255, 0.4);
     margin-bottom: 12px;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 400;
 }
 
@@ -133,7 +133,7 @@ label {
     margin-bottom: 16px;
     color: rgba(255, 255, 255, 0.5);
     font-weight: 400;
-    font-size: 11px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -172,7 +172,7 @@ input:focus {
 .license-help a {
     color: rgba(255, 255, 255, 0.4);
     text-decoration: none;
-    font-size: 12px;
+    font-size: 14px;
     transition: color 0.2s;
 }
 
@@ -207,7 +207,7 @@ input:focus {
 .message {
     text-align: center;
     margin-top: 16px;
-    font-size: 13px;
+    font-size: 14px;
     min-height: 18px;
 }
 
